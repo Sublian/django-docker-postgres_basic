@@ -200,6 +200,3 @@ docker volume prune
 Este proyecto está bajo licencia **MIT**.
 
 ---
-
-¡Gracias por revisar este proyecto!  
-Si quieres que genere un *badge wall*, *GIF animado*, *diagrama adicional* o *versión en inglés*, solo dímelo. 😊
