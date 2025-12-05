@@ -1,0 +1,18 @@
+*.pyc
+__pycache__/
+*.sqlite3
+env/
+venv/
+*.log
+*.pid
+*.sock
+/static/
+/media/
+# .env
+.idea/
+.vscode/
+__pycache__/
+# Docker
+*.pid
+*.seed
+*.tar
