@@ -56,7 +56,11 @@ jobs:
             sleep 2
           done
 
-      - name: 🧩 Migraciones
+      - name: 🧩 Crear migraciones (seguro)
+        run: |
+          python manage.py makemigrations
+
+      - name: 🧩 Aplicar migraciones
         run: |
           python manage.py migrate
 
