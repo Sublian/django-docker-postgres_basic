@@ -11,8 +11,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "${POSTGRES_PORT}:5432"
+    # ports:
+    #   - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -31,27 +31,60 @@ services:
       - .env
     command: >
       sh -c "python manage.py migrate &&
-             gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"
+            python manage.py collectstatic --noinput &&
+            gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DEBUG: ${DEBUG}
-      SECRET_KEY: ${SECRET_KEY}    
+      - .:/app:ro                # en producción es preferible readonly o no montar (a gusto)
+      - ./logs/web:/var/log/app  # logs persistentes del servicio web
+    # ports:
+    #   - "8000:8000"
+    # environment:
+    #   DB_NAME: ${DB_NAME}
+    #   DB_USER: ${DB_USER}
+    #   DB_PASSWORD: ${DB_PASSWORD}
+    #   DB_HOST: ${DB_HOST}
+    #   DB_PORT: ${DB_PORT}
+    #   DEBUG: ${DEBUG}
+    #   SECRET_KEY: ${SECRET_KEY}    
     depends_on:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - django_network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: django_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./staticfiles:/static:ro         # carpeta donde collectstatic pondrá los archivos
+      - ./logs/nginx:/var/log/nginx      # logs persistentes de nginx
+    depends_on:
+      - web
+    networks:
+      - django_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - ./logs/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - db
     networks:
       - django_network
 

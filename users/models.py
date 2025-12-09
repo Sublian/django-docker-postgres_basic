@@ -9,6 +9,18 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=20, blank=True, verbose_name='Teléfono')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de actualización')
+    
+    ROLE_CHOICES = (
+        ('ADMIN', 'Administrador'),
+        ('STAFF', 'Staff'),
+        ('CLIENTE', 'Cliente'),
+    )
+
+    role = models.CharField(
+        max_length=10,
+        choices=ROLE_CHOICES,
+        default='CLIENTE'
+    )
 
     class Meta:
         verbose_name = 'Usuario'

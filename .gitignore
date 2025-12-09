@@ -8,6 +8,7 @@ venv/
 *.sock
 /static/
 /media/
+logs/
 # .env
 .idea/
 .vscode/
@@ -16,3 +17,4 @@ __pycache__/
 *.pid
 *.seed
 *.tar
+migrations

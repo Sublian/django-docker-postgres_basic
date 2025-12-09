@@ -6,4 +6,8 @@ services:
     environment:
       DEBUG: "1"
     volumes:
-      - .:/app
+      - ./:/app
+      - ./logs/web:/var/log/app
+    ports:
+      - "8000:8000"
+
