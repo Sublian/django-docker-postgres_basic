@@ -17,8 +17,13 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'ADMIN':
+
+        if user.role == "ADMIN":
             return Product.objects.all()
+
+        if user.role == "STAFF":
+            return Product.objects.filter(is_public=True)
+
         return Product.objects.filter(owner=user)
 
     def perform_create(self, serializer):

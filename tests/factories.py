@@ -8,11 +8,18 @@ User = get_user_model()
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True  # ✅ ESTA LÍNEA ELIMINA EL WARNING
 
     username = factory.Sequence(lambda n: f"user{n}")
     email = factory.LazyAttribute(lambda o: f"{o.username}@test.com")
-    password = factory.PostGenerationMethodCall('set_password', '123456')
     role = 'CLIENTE'
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        pwd = extracted if extracted else "123456"
+        self.set_password(pwd)
+        if create:
+            self.save()
 
 
 class AdminFactory(UserFactory):
