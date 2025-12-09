@@ -28,4 +28,4 @@ class CustomUser(AbstractUser):
         ordering = ['-created_at']
 
     def __str__(self):
-        return self.username
+        return f"{self.username} - {self.password}"
