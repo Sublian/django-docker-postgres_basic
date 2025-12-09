@@ -1,0 +1,65 @@
+name: Django CI with Docker
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DEBUG: 1
+      SECRET_KEY: test-secret
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      ALLOWED_HOSTS: localhost,127.0.0.1
+
+    steps:
+      - name: ⬇️ Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: 📦 Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🐘 Esperar PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Esperando postgres..."
+            sleep 2
+          done
+
+      - name: 🧩 Migraciones
+        run: |
+          python manage.py migrate
+
+      - name: 🧪 Ejecutar tests
+        run: |
+          pytest
