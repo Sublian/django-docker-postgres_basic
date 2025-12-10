@@ -11,6 +11,15 @@ from .serializers import (
     LoginSerializer,
     ChangePasswordSerializer
 )
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .throttles import LoginRateThrottle
+import sys
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    if "pytest" in sys.argv[0]:
+        throttle_classes = []
+    else:
+        throttle_classes = [LoginRateThrottle]
 
 class UserViewSet(viewsets.ModelViewSet):
     """

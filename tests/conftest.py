@@ -1,11 +1,19 @@
 import pytest
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from factories import AdminFactory, StaffFactory, UserFactory
 
 User = get_user_model()
 
+@pytest.fixture(autouse=True)
+def clear_throttle_cache():
+    cache.clear()
 
+@pytest.fixture(autouse=True)
+def disable_throttling(settings):
+    settings.REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"] = []
+    
 @pytest.fixture
 def api_client():
     return APIClient()
@@ -37,6 +45,8 @@ def get_token(api_client):
             },
             format="json"
         )
-        return response.data["access"]
 
+        assert response.status_code == 200, f"Login failed: {response.status_code} - {response.data}"
+
+        return response.data["access"]
     return _get_token

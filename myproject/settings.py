@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,6 +129,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+     "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "20/min",   # 🔒 usuarios no autenticados
+        "user": "100/min",  # 🔒 usuarios autenticados
+    },
 }
 
 SIMPLE_JWT = {
@@ -169,3 +179,9 @@ LOGGING = {
     },
 }
 
+REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"].update({
+    "login": "5/min",  # 🔥 solo 5 intentos por minuto por IP
+})
+
+if "pytest" in sys.argv[0]:
+    REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"] = []
