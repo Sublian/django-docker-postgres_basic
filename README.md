@@ -1,202 +1,168 @@
-# 🚀 Proyecto Django + PostgreSQL + Docker  
-Modern Dev Edition
+# 🚀 Django API Template --- Docker • JWT • Roles • Tests
 
-![Status](https://img.shields.io/badge/status-active-success)
+**Modern Dev Template for Real Projects**
+
+![Status](https://img.shields.io/badge/status-template-success)
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Django](https://img.shields.io/badge/Django-4.2-green)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 ![PostgreSQL](https://img.shields.io/badge/Postgres-15-lightblue)
+![JWT](https://img.shields.io/badge/Auth-JWT-orange)
+![Tests](https://img.shields.io/badge/Tests-Pytest-success)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 
----
+------------------------------------------------------------------------
 
-# 📚 Tabla de Contenido
-- [📦 Sobre el Proyecto](#-sobre-el-proyecto)
-- [⚙️ Stack Tecnológico](#️-stack-tecnológico)
-- [🧱 Arquitectura](#-arquitectura)
-- [🐳 Docker Compose Overview](#-docker-compose-overview)
-- [🚀 Instalación](#-instalación)
-- [🧪 Uso](#-uso)
-- [📡 Endpoints API](#-endpoints-api)
-- [🗂 Estructura del Proyecto](#-estructura-del-proyecto)
-- [🔧 Troubleshooting](#-troubleshooting)
-- [🗺 Roadmap](#-roadmap)
-- [📄 Licencia](#-licencia)
+## 📦 Sobre el Proyecto
 
----
+Este repositorio es una **plantilla profesional reutilizable** basada
+en:
 
-# 📦 Sobre el Proyecto
-Este proyecto demuestra cómo crear un entorno **Django + PostgreSQL** completamente **dockerizado**, listo para desarrollo, con una API de usuarios basada en Django REST Framework.
+-   ✅ Autenticación JWT con Refresh Token
+-   ✅ Rotación y blacklist de tokens
+-   ✅ Sistema de roles (admin, staff, client)
+-   ✅ Módulo de productos desacoplable
+-   ✅ Rate limiting contra fuerza bruta
+-   ✅ Tests automatizados con Pytest
+-   ✅ 100% Dockerizado
 
-💡 Perfecto para **bootcamps**, **entrevistas técnicas**, **prototipos** y **proyectos base**.
+Pensado como **base para futuros SaaS, APIs privadas, backends móviles y
+microservicios**.
 
----
+------------------------------------------------------------------------
 
-# ⚙️ Stack Tecnológico
-- **Django 4.2**
-- **Python 3.11**
-- **Django REST Framework**
-- **PostgreSQL 15**
-- **Docker & Docker Compose**
-- **Mermaid Diagrams**
-- **Volúmenes persistentes**
+## ⚙️ Stack Tecnológico
 
----
+-   Django 4.2
+-   Python 3.11
+-   Django REST Framework
+-   PostgreSQL 15
+-   SimpleJWT (con rotación)
+-   Pytest + Factory Boy + Faker
+-   Docker & Docker Compose
 
-# 🧱 Arquitectura
+------------------------------------------------------------------------
 
-## 🔷 Arquitectura General
-```mermaid
-graph TD
-    A[Cliente / Navegador] -->|HTTP| B(Django API)
-    B -->|ORM| C[(PostgreSQL)]
-    B --> D[Volumen del Código]
-    C --> E[Volumen Persistente]
+## 🧱 Arquitectura General
+
+Client → API (Django) → Auth (JWT + Roles) → PostgreSQL
+
+------------------------------------------------------------------------
+
+## 🔐 Seguridad Implementada
+
+-   JWT Access + Refresh
+-   Rotación automática de Refresh Tokens
+-   Blacklist de tokens antiguos
+-   Protección de rutas por rol
+-   Rate Limiting en login
+
+------------------------------------------------------------------------
+
+## 🐳 Docker --- Modos de Ejecución
+
+### 🔹 Modo Desarrollo
+
+``` bash
+docker-compose up --build
 ```
 
-## 🔷 Flujo de Autenticación
-```mermaid
-sequenceDiagram
-    participant U as Usuario
-    participant A as API Django
-    participant DB as Base de Datos
-    U->>A: POST /api/users/login/
-    A->>DB: Validar credenciales
-    DB-->>A: Usuario válido
-    A-->>U: Respuesta con sesión
+### 🔹 Modo Producción (simulado)
+
+``` bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
----
+------------------------------------------------------------------------
 
-# 🐳 Docker Compose Overview
-```yaml
-services:
-  db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_DB: django_db
-      POSTGRES_USER: django_user
-      POSTGRES_PASSWORD: django_pass
+## 📡 Endpoints Principales
 
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
+### Auth
+
+  Método   Endpoint              Descripción
+  -------- --------------------- --------------------
+  POST     /api/login/           Login JWT
+  POST     /api/token/refresh/   Refresh token
+  POST     /api/logout/          Logout + Blacklist
+  GET      /api/protected/       Ruta protegida
+
+### Productos
+
+  Método   Endpoint
+  -------- ------------------------------
+  GET      /api/products/
+  POST     /api/products/
+  DELETE   /api/products/`<id>`{=html}/
+
+------------------------------------------------------------------------
+
+## 🧪 Tests Automatizados
+
+Incluye tests completos de:
+
+-   Autenticación
+-   JWT
+-   Rate limiting
+-   Permisos por rol
+-   Productos
+-   Accesos restringidos
+
+Ejecución:
+
+``` bash
+docker-compose exec web pytest
 ```
 
----
+------------------------------------------------------------------------
 
-# 🚀 Instalación
+## 🧰 Precarga de Datos
 
-### 1️⃣ Clonar el repositorio
-```bash
-git clone https://github.com/tuusuario/django-docker-postgres.git
-cd django-docker-postgres
-```
+Incluye comandos para generar:
 
-### 2️⃣ Construir contenedores
-```bash
-docker-compose build
-```
+-   ✅ 5 usuarios falsos
+-   ✅ 20 productos de prueba
 
-### 3️⃣ Inicializar proyecto (solo primera vez)
-```bash
-docker-compose run --rm web django-admin startproject myproject .
-docker-compose run --rm web python manage.py startapp users
-```
+Usando Faker.
 
-### 4️⃣ Migraciones
-```bash
-docker-compose run --rm web python manage.py migrate
-```
+------------------------------------------------------------------------
 
-### 5️⃣ Crear superusuario
-```bash
-docker-compose run --rm web python manage.py createsuperuser
-```
+## 🗂 Estructura del Proyecto
 
----
+    project/
+    ├── myproject/
+    ├── users/        # CustomUser + Roles
+    ├── products/     # Módulo desacoplable
+    ├── tests/
+    ├── docker-compose.yml
+    ├── requirements.txt
 
-# 🧪 Uso
+------------------------------------------------------------------------
 
-### Ejecutar el proyecto:
-```bash
-docker-compose up
-```
+## 🗺 Roadmap Técnico
 
-### Acceder:
-- API → http://localhost:8000/api/users/
-- Admin → http://localhost:8000/admin/
+-   ✅ JWT + Refresh Rotation
+-   ✅ Rate Limiting
+-   ✅ Roles
+-   ✅ Tests
+-   🔜 Logs estructurados
+-   🔜 Monitoreo
+-   🔜 CI/CD
 
----
+------------------------------------------------------------------------
 
-# 📡 Endpoints API
+## ✅ Conclusión
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/users/` | Crear usuario |
-| GET | `/api/users/` | Listar usuarios |
-| POST | `/api/users/login/` | Autenticar |
-| GET | `/api/users/me/` | Perfil logueado |
-| POST | `/api/users/change_password/` | Cambiar contraseña |
-| POST | `/api/users/logout/` | Cerrar sesión |
+Este proyecto ya es una **plantilla backend profesional de nivel
+intermedio-avanzado**, ideal para:
 
----
+-   Startups
+-   Proyectos personales
+-   Freelance
+-   Portafolio técnico
+-   Formación avanzada
 
-# 🗂 Estructura del Proyecto
-```
-proyecto/
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-├── myproject/
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-└── users/
-    ├── models.py
-    ├── views.py
-    ├── serializers.py
-    └── urls.py
-```
+------------------------------------------------------------------------
 
----
+## 📄 Licencia
 
-# 🔧 Troubleshooting
-
-### ❗ Base de datos no disponible
-```bash
-docker-compose logs db
-```
-
-### ❗ Cambios no aparecen en el servidor
-```bash
-docker-compose restart web
-```
-
-### ❗ Limpiar entorno Docker
-```bash
-docker system prune -a
-docker volume prune
-```
-
----
-
-# 🗺 Roadmap
-- [ ] Integrar JWT
-- [ ] Añadir Nginx + Gunicorn
-- [ ] Tests unitarios (pytest + DRF)
-- [ ] CI/CD con GitHub Actions
-- [ ] Documentación con Swagger/OpenAPI
-
----
-
-# 📄 Licencia
-Este proyecto está bajo licencia **MIT**.
-
----
+MIT --- Uso libre para cualquier proyecto.
