@@ -67,6 +67,18 @@ Client → API (Django) → Auth (JWT + Roles) → PostgreSQL
 docker-compose up --build
 ```
 
+La API estará disponible en:
+
+```
+http://localhost:8000/api/
+```
+
+### Detener contenedores
+
+```bash
+docker-compose down
+```
+
 ### 🔹 Modo Producción (simulado)
 
 ``` bash
@@ -79,20 +91,20 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 ### Auth
 
-  Método   Endpoint              Descripción
-  -------- --------------------- --------------------
-  POST     /api/login/           Login JWT
-  POST     /api/token/refresh/   Refresh token
-  POST     /api/logout/          Logout + Blacklist
-  GET      /api/protected/       Ruta protegida
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | /api/login/ | Login con JWT |
+| POST | /api/refresh/ | Refresh token |
+| GET | /api/protected/ | Vista protegida |
+
+
 
 ### Productos
 
-  Método   Endpoint
-  -------- ------------------------------
-  GET      /api/products/
-  POST     /api/products/
-  DELETE   /api/products/`<id>`{=html}/
+| Método | Endpoint | Descripción |
+| GET | /api/products/ | Listar productos |
+| POST | /api/products/ | Crear producto (staff/admin) |
+| DELETE | /api/products/{id}/ | Eliminar (solo admin) |
 
 ------------------------------------------------------------------------
 
@@ -124,6 +136,66 @@ Incluye comandos para generar:
 
 Usando Faker.
 
+## 🧑‍💻 Usuarios de Prueba
+
+Se generan automáticamente:
+
+- Clientes
+- Staff
+- Admin
+
+Y productos falsos usando Faker.
+
+---
+
+## 🗄️ Acceso a la Base de Datos (PostgreSQL en Docker)
+
+⚠️ Este proyecto **NO usa el usuario `postgres` por defecto**. Se define un usuario personalizado en el archivo `.env`:
+
+```env
+POSTGRES_USER=django_user
+POSTGRES_PASSWORD=django_pass
+POSTGRES_DB=django_db
+```
+
+### ✅ Comando correcto para acceder a la BD
+
+```bash
+docker-compose exec db psql -U django_user -d django_db
+```
+
+### ❌ Comando incorrecto (generará error)
+
+```bash
+docker-compose exec db psql -U postgres
+```
+
+### 📌 Comandos útiles dentro de PostgreSQL
+
+```sql
+\l      -- listar bases de datos
+\dt     -- listar tablas
+\du     -- listar usuarios
+```
+
+Ejemplos:
+
+```sql
+SELECT * FROM users_customuser;
+SELECT * FROM products_product;
+```
+
+---
+
+## 🛡️ Seguridad Implementada
+
+- JWT con rotación
+- Blacklist de refresh tokens
+- Rate limiting en login
+- Validaciones por rol
+
+
+
 ------------------------------------------------------------------------
 
 ## 🗂 Estructura del Proyecto
@@ -148,6 +220,17 @@ Usando Faker.
 -   🔜 Monitoreo
 -   🔜 CI/CD
 
+---
+
+## 🎯 Objetivo del Repositorio
+
+Este proyecto funciona como **plantilla base reutilizable** para futuros proyectos:
+
+- APIs seguras
+- Backend moderno
+- Tests incluidos desde el inicio
+- Docker listo para producción
+
 ------------------------------------------------------------------------
 
 ## ✅ Conclusión
@@ -165,4 +248,4 @@ intermedio-avanzado**, ideal para:
 
 ## 📄 Licencia
 
-MIT --- Uso libre para cualquier proyecto.
+Proyecto educativo para aprendizaje y reutilización.
