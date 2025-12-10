@@ -3,6 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Product
 from .serializers import ProductSerializer
 from users.permissions import IsAdmin, IsStaff
+import logging
+
+logger = logging.getLogger("django.request")
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer

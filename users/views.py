@@ -14,12 +14,27 @@ from .serializers import (
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .throttles import LoginRateThrottle
 import sys
+import logging
+
+logger = logging.getLogger("django.request")
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     if "pytest" in sys.argv[0]:
         throttle_classes = []
     else:
         throttle_classes = [LoginRateThrottle]
+        
+    def post(self, request, *args, **kwargs):
+        ip = request.META.get("REMOTE_ADDR")
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            logger.warning(f"LOGIN OK | user={request.data.get('username')} | ip={ip}")
+        else:
+            logger.warning(f"LOGIN FAIL | user={request.data.get('username')} | ip={ip}")
+
+        return response
 
 class UserViewSet(viewsets.ModelViewSet):
     """
