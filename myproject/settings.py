@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     # Apps locales
     'users',
     'products',
@@ -132,7 +133,11 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_TYPES': ('Bearer',),   
+    "ROTATE_REFRESH_TOKENS": True,   # ✅ CLAVE
+    "BLACKLIST_AFTER_ROTATION": True,  # ✅ CLAVE
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    
 }
 
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
