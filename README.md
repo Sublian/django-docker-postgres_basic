@@ -233,7 +233,7 @@ Este proyecto funciona como **plantilla base reutilizable** para futuros proyect
 
 ------------------------------------------------------------------------
 
-# 🚀 100% Test Coverage Achieved
+# 🚀 100% Test Coverage Achieved (date: 18/12/2025)
 
 **Professional Django REST API with Full Test Coverage • Docker • JWT • PostgreSQL**
 
@@ -241,8 +241,6 @@ Este proyecto funciona como **plantilla base reutilizable** para futuros proyect
 [![Django 4.2](https://img.shields.io/badge/Django-4.2-green.svg)](https://www.djangoproject.com/)
 [![DRF](https://img.shields.io/badge/DRF-3.14-red.svg)](https://www.django-rest-framework.org/)
 [![Coverage 100%](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](#)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 🏆 The Achievement: 100% Test Coverage
 
