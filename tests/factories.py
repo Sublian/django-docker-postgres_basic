@@ -1,3 +1,4 @@
+# test/factories.py
 import factory
 from django.contrib.auth import get_user_model
 from products.models import Product

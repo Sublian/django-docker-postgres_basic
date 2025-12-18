@@ -1,0 +1,29 @@
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "myproject/wsgi.py",
+    "myproject/asgi.py",
+    "myproject/settings.py",
+    "manage.py",
+    "*/__pycache__/*",
+    "*/conftest.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+fail_under = 85  # Podemos empezar con 85 y luego subirlo a 90
+
+[tool.coverage.html]
+directory = "htmlcov"
