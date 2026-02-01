@@ -16,7 +16,7 @@ def test_client_cannot_create_product(api_client, client_user, get_token):
             "stock": 10,
             "is_public": True,
         },
-        format="json"
+        format="json",
     )
 
     assert response.status_code == 403
@@ -35,7 +35,7 @@ def test_staff_can_create_product(api_client, staff_user, get_token):
             "stock": 5,
             "is_public": True,
         },
-        format="json"
+        format="json",
     )
 
     assert response.status_code == 201
@@ -52,6 +52,7 @@ def test_staff_cannot_delete_product(api_client, staff_user, get_token):
 
     assert response.status_code == 403
 
+
 @pytest.mark.django_db
 def test_admin_can_delete_product(api_client, admin_user, get_token):
     product = ProductFactory()
@@ -62,6 +63,7 @@ def test_admin_can_delete_product(api_client, admin_user, get_token):
     response = api_client.delete(f"/api/products/{product.id}/")
 
     assert response.status_code == 204
+
 
 @pytest.mark.django_db
 def test_client_sees_only_own_products(api_client, client_user, get_token):

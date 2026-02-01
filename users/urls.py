@@ -4,9 +4,9 @@ from .views import UserViewSet
 from .api import ProtectedTestView
 
 router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='user')
+router.register(r"users", UserViewSet, basename="user")
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('protected/', ProtectedTestView.as_view()),
+    path("", include(router.urls)),
+    path("protected/", ProtectedTestView.as_view()),
 ]

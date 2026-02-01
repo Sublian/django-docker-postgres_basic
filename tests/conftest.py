@@ -8,14 +8,17 @@ from factories import AdminFactory, StaffFactory, UserFactory
 
 User = get_user_model()
 
+
 @pytest.fixture(autouse=True)
 def clear_throttle_cache():
     cache.clear()
 
+
 @pytest.fixture(autouse=True)
 def disable_throttling(settings):
     settings.REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"] = []
-    
+
+
 @pytest.fixture
 def api_client():
     return APIClient()
@@ -41,14 +44,14 @@ def get_token(api_client):
     def _get_token(user):
         response = api_client.post(
             "/api/login/",
-            {
-                "username": user.username,
-                "password": "123456"
-            },
-            format="json"
+            {"username": user.username, "password": "123456"},
+            format="json",
         )
 
-        assert response.status_code == 200, f"Login failed: {response.status_code} - {response.data}"
+        assert (
+            response.status_code == 200
+        ), f"Login failed: {response.status_code} - {response.data}"
 
         return response.data["access"]
+
     return _get_token

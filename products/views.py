@@ -7,14 +7,15 @@ import logging
 
 logger = logging.getLogger("django.request")
 
+
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update']:
+        if self.action in ["create", "update", "partial_update"]:
             return [IsStaff()]
-        if self.action in ['destroy']:
+        if self.action in ["destroy"]:
             return [IsAdmin()]
         return [IsAuthenticated()]
 

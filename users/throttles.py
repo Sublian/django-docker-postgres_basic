@@ -7,7 +7,4 @@ class LoginRateThrottle(SimpleRateThrottle):
     def get_cache_key(self, request, view):
         # limitamos por IP
         ident = self.get_ident(request)
-        return self.cache_format % {
-            "scope": self.scope,
-            "ident": ident
-        }
+        return self.cache_format % {"scope": self.scope, "ident": ident}

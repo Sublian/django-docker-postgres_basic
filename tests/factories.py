@@ -6,6 +6,7 @@ import random
 
 User = get_user_model()
 
+
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
@@ -13,7 +14,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = factory.Sequence(lambda n: f"user{n}")
     email = factory.LazyAttribute(lambda o: f"{o.username}@test.com")
-    role = 'CLIENTE'
+    role = "CLIENTE"
 
     @factory.post_generation
     def password(self, create, extracted, **kwargs):
@@ -24,19 +25,19 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class AdminFactory(UserFactory):
-    role = 'ADMIN'
+    role = "ADMIN"
 
 
 class StaffFactory(UserFactory):
-    role = 'STAFF'
+    role = "STAFF"
 
 
 class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
-    name = factory.Faker('word')
-    price = factory.Faker('pydecimal', left_digits=3, right_digits=2, positive=True)
-    stock = factory.Faker('random_int', min=1, max=100)
+    name = factory.Faker("word")
+    price = factory.Faker("pydecimal", left_digits=3, right_digits=2, positive=True)
+    stock = factory.Faker("random_int", min=1, max=100)
     is_public = True
     owner = factory.SubFactory(UserFactory)
