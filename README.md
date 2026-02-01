@@ -11,6 +11,7 @@
 [![Tests](https://img.shields.io/badge/Tests-Pytest-success)](https://pytest.org/)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/Sublian/django-docker-postgres_basic)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue)](https://github.com/features/actions)
+![CI](https://github.com/Sublian/django_background_task/workflows/Django%20CI%20Tests/badge.svg)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A professional, reusable Django REST API template designed for real-world projects. Features complete authentication, role-based permissions, comprehensive testing, CI/CD pipeline, and full Docker containerization for both development and production environments.
