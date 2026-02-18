@@ -110,6 +110,7 @@ En los logs verás:
 # ⚖️ 4. Diferencias clave entre Dev Mode y Deploy Mode
 
 | Característica | 	Dev Mode | 	Deploy Mode | 
+| ------------- | ------------- |:-------------:|
 | Servidor | 	runserver |  	Gunicorn | 
 | Hot Reload |  	✔ Sí	|   ❌ No | 
 | Volúmenes | 	✔ Montados	|  ❌ No montados | 
@@ -167,9 +168,21 @@ docker-compose logs -f
 # 🎓 7. Qué has aprendido en este nivel
 
 ✔ Diferencia entre override y compose normal
+
 ✔ Separación entre entornos desarrollo y producción
+
 ✔ Cómo usar .env en Docker
+
 ✔ Cómo levantar Gunicorn con Django
+
 ✔ Cómo aplicar healthchecks en contenedores
+
 ✔ Cómo leer variables de entorno desde Django
+
 ✔ Cómo Docker combina configuraciones
+
+
+---
+
+# 📄 Licencia
+Este proyecto está bajo licencia **MIT**.
